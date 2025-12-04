@@ -1,6 +1,6 @@
  <img src="https://github.com/user-attachments/assets/15600b18-f73b-4ba3-a959-47f0048a1ab6" alt="image2" width="50%">
 
-# TDSE_TF_3-06: Pava Eléctrica
+# TDSE_TF_3-06: Jarra Eléctrica
 FIUBA - Electrónica - Taller de Sistemas Embebidos - Trabajo Práctico Final
 
 Autores: 
@@ -11,10 +11,8 @@ Autores:
 **Fecha: 2do cuatrimestre 2025**
 
 
-## El trabajo se presentara en febrero
-
 # Introduccion
-El trabajo consiste en desarrollar una pava electrica. Cuenta con dos modos de operacion predeterminados, modo MATE y modo TE, ademas el usuario podra seleccionar una temperatura deseada entre un rango de valores preestablecidos. El objetivo de este proyecto es proporcionar una alternativa a las pavas clasicas de manera tal que brinde mayor comodidad a la hora de usarla. Se propone una forma sencilla y optima para calentar el agua, evitando desperciar energía. Por último, 
+El trabajo consiste en desarrollar una jarra electrica. Cuenta con dos modos de operacion predeterminados, modo MATE y modo TE, ademas el usuario podra seleccionar una temperatura deseada entre un rango de valores preestablecidos. El objetivo de este proyecto es proporcionar una alternativa a las pavas clasicas de manera tal que brinde mayor comodidad a la hora de usarla. Se propone una forma sencilla y optima para calentar el agua, evitando desperciar energía.
 
 
 ## Controladores
@@ -31,29 +29,52 @@ Se implementara un modulo bluetooth mediante el cual el usuario podra hacer uso 
 
 ## Diagrama en bloques
 
-En la siguiente Figura se muestra el diagrama en bloques del sistema con los principales módulos del proyecto
+En la Figura 1 se muestra el diagrama en bloques del sistema con los principales módulos del proyecto
 <p align="center">
   <img width="500" height="500" alt="diagrama_sist_emb" src="https://github.com/user-attachments/assets/078236f9-eeb4-4561-830b-e5ca84e10435" />
 </p>
 
 <p align="center"><em>Figura 1: Diagrama en bloques del sistema</em></p>
 
-
-
-## Requisitos Funcionales
-- La pava debe calentar agua hasta temperaturas configurables (modo MATE: ~80°C, modo TÉ: ~100°C, modo personalizado: 60-95°C).
-- Debe detectar presencia de agua mediante sensor láser.
-- Debe detectar presencia física de la pava mediante switch magnético.
-- Debe permitir programar el encendido mediante reloj en tiempo real (propio del uC).
-- Debe comunicarse vía Bluetooth para configuración y monitoreo.
-- Debe almacenar en memoria EEPROM/Flash las configuraciones de usuario.
-- Debe indicar estados mediante LEDs y buzzer (ej: agua lista, error, etc.).
+## Elicitación de requisitos y casos de uso
+#### El trabajo se presentara en febrero
+| Grupo | ID | Descripción |
+| :---- | :---- | :---- |
+| Indicadores | 1.1 | El sistema contará con LED's para indicar el modo |
+|  | 1.2 | El sistema contará con un buzzer para indicar que termino de calentar |
+| Sensores | 2.1 | El sistema contará con un sensor laser para detectar presencia de agua |
+| | 2.2 | El sistema contará con un switch magnético para detectar presencia de la pava |
+| | 2.3 | El sistema contará con un thermosensor para verificar la temperatura del agua |
+| Comunicacion Bluetooth | 3.1 | El sistema se comunicará mediante Bluetooth con con la aplicación |
+| | 3.2 | El sistema deberá comunicarle la temperatura a la aplicación |
+| Aplicación | 4.1 |La aplicación podra programar el encendido del sistema en un horario programado |
+| | 4.2 | La aplicación enviará una notificación al usuario cuando el agua este lista |
+| | 4.3 | La aplicación enviará una notificación al usuario cuando este finalice su uso (para apagarla y evitar desperdicio de energía) |
+| | 4.4 | La aplicación le permitirá al usuario elegir una temperatura personalizada (60-95°C) |
+| Memoria | 5.1 | El sistema almacenará en memoria el último estado de la jarra (última temperatura utilzada) |
+<p align="center"><em>Tabla 1: Requisitos del proyecto</em></p>
 
 Este proyecto busca innovar en la manera de calentar agua. Cuando se busca una pava eléctrica, se tiene en cuenta el costo principalmente. Empresas como Philips o Samsung se remiten a lo simple, algo que pueda ser utilizado por cualquier persona. En nuestro caso, se busca minimizar el tiempo de espera que ocurre al calentar agua. Pudiendo programar una hora para calentar agua y utilizando energía solo cuando es necesario, se logra una eficiencia muy superior a cualquier producto que se pueda hallar.  
 
 ### Casos de Uso Principales
-1. **Calentar agua en modo MATE/TÉ**
-El usuario podra calentar el agua via Bluetooth, osea sin la necesidad de estar presente. Las precondiciones para que esto ocurra son simplemete que la pava se encuentre sobre la base, que tenga agua y que este enchufada. Una vez cumplidos estos requisitos el sistema podra activarse, en caso de que el usuario realice esta accion diariamente, se podra programar un horario fijo para calentar agua sin necesidad de la programacion manual del usuario. Una vez finalizado el proceso, mediante el buzzer/alarma/app se notificara al usuario que el agua esta lista. Adicionalmente, se guardara el estado (ultima temperatura utilizada) para su próximo uso. Por último, se espera un tiempo fijo desde el fin del uso para verificar si el usuario desea seguir calentando agua. Si no se utiliza mas, se espera que el usuario desenchufe la pava, de lo contrario se le notificará y se cortara el suministro de energía para evitar desperdicios.
+
+| Elemento | Definición |
+| :---- | :---- |
+| Disparador | Se quiere calentar agua para TE |
+| Precondiciones | El sistema está encendido. La pava se encuentra en la base y está llena con agua. El sistema se encuentra en modo té |
+| Flujo principal | El usuario elige el modo té. El sistema se encuentra encendido y la pava se encuentra en la base y con la cantidad necesaria de agua. Un led se verifica que el sistema se encuentra en modo té. Se acciona el dispositivo. Una vez finalizado, la aplicación envia una notificación de que la jarra termino de calentar. El usuario desconecta la jarra una vez finalizado el uso|
+| Flujos alternativos | a. El usuario quiere iniciar el sistema pero no cargo la pava con agua, el buzzer inidicará que la acción no es posible.  b.El usuario deja encendido y por ende enchufado el sistema, la aplicación le envia una notificación indicando que se apagará el sistema y se cortará el suministro de energía |
+
+<p align="center"><em>Tabla 2: Caso de uso 1: El usuario quiere calentar agua para un té</em></p>
+
+| Elemento | Definición |
+| :---- | :---- |
+| Disparador | Se desea tener el agua caliente para un horario predeterminado |
+| Precondiciones | El sistema está encendido. La pava se encuentra en la base y está llena con agua. El reloj del uC está activo|
+| Flujo principal | El usuario mediante la aplicación programa un horario para calentar el agua. Previamente, coloca la jarra en la base y llena la misma con agua. Una vez finalizado, el usuario recibe una notificación de que la jarra termino de calentar. El usuario desconecta la jarra una vez finalizado el uso |
+| Flujos alternativos | a. El usuario no colocó la jarra en la base previamente ni vierte el agua necesaria, el buzzer indicara que esta acción no es posible b.El reloj del uC no esta activo. Si el reloj no esta activo, no se podrá programar un horario para calentar agua |
+
+<p align="center"><em>Tabla 3: Caso de uso 2: El usuario quiere programar un horario para calentar agua</em></p>
 
 ### Hardware a utilizar
 #### Obligatorio:
